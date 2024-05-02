@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Start a Fund</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Start a Fund</h1>
+        <form id="fundForm" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="id_fund_name">Name of Fund:</label>
+                {{ startfundform.fund_name }}
+            </div>
+            <div class="form-group">
+                <label for="id_duration_from">Duration (From):</label>
+                {{ startfundform.duration_from }}
+            </div>
+            <div class="form-group">
+                <label for="id_duration_to">Duration (To):</label>
+                {{ startfundform.duration_to }}
+            </div>
+            <div class="form-group">
+                <label for="id_target_amount">Target Amount:</label>
+                {{ startfundform.target_amount }}
+            </div>
+            <div class="form-group">
+                <label for="id_email">Your Email:</label>
+                {{ startfundform.email }}
+            </div>
+            <div class="form-group">
+                <label for="id_Reason_for_fund">Reason for Fund:</label>
+                {{ startfundform.Reason_for_fund }}
+            </div>
+            <button type="submit" class="btn btn-secondary">Start Fund</button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('fundForm').addEventListener('submit', function (event) {
+                event.preventDefault();  // Prevent the default form submission behavior
+                var formData = new FormData(this);
+                fetch(this.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'  // Include the CSRF token
+                    }
+                })
+                .then(response => {
+                    if (response.redirected) {
+                        window.location.assign(response.url);  // Redirect to the URL provided by the server
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred. Please try again.');  // Display error message
+                });
+            });
+        });
+    </script>
+    
+</body>
+</html>
